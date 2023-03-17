@@ -36,12 +36,53 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+@app.route('/characters', methods=['GET'])
+def handle_characters():
 
+    characters = Character.query.all()
+    characters_list = list(map(lambda character: character.serialize_all(), characters))
 
+    response_body = {
+        "message": "ok",
+        "result": characters_list
+    }
 
+    return jsonify(response_body), 200
 
+@app.route('/character/<int:id>', methods=["GET"])
+def handle_character(id):
+    idcharacter = Character.query.get(id)
 
+    response_body = {
+        "message": "ok",
+        "result": idcharacter.serialize_each()
+    }
 
+    return jsonify(response_body), 200
+
+@app.route('/planets', methods=['GET'])
+def handle_planets():
+
+    planets = Planet.query.all()
+    planets_list = list(map(lambda planet: planet.serialize_all(), planets))
+
+    response_body = {
+        "message": "ok",
+        "result": planets_list
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/planet/<int:id>', methods=["GET"])
+def handle_planet(id):
+    idplanet = Planet.query.get(id)
+
+    response_body = {
+        "message": "ok",
+        "result": idplanet.serialize_each()
+    }
+
+    return jsonify(response_body), 200
 
 
 # this only runs if `$ python src/app.py` is executed
